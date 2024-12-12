@@ -15,6 +15,13 @@ curl -L https://github.com/docker/compose/releases/download/v2.30.3/docker-compo
 #Modificar a permissão do diretório
 sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
+#Iniciar docker
+sudo systemctl start docker
+
+#Configurar para iniciar automaticamente na iniialização do sistema
+sudo systemctl enable docker
+
+
 #Criar o diretório efs 
 sudo mkdir -p /efs
 
