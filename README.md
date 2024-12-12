@@ -42,7 +42,10 @@ Este projeto é uma atividade prática solicitada pela equipe de estágio da Com
      - Classe da instância: `db.t3.micro`.
   5. **Conectividade:**
      - Atribua o grupo de segurança criado anteriormente.
-
+     - Não se conectar a um recurso de computação do EC2
+     - Acesso Público: não
+  6. **Configuração adicional:**
+     - Nome do banco de dados
 ---
 
 ### 4. Iniciar uma Instância EC2
