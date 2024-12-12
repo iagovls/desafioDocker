@@ -13,6 +13,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágio da Com
   - TCP 443 (HTTPS)
   - TCP 22 (SSH)
   - TCP 2049 (NFS)
+  - TCP 3306 (MYSQL)
 
 ---
 
