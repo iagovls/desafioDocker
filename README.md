@@ -86,7 +86,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 </table>
 </details>
 
-
+<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20113859.png">
 
 ### 2. Criar os Grupos de Segurança na AWS
 - Habilitar as seguintes regras de entrada:
@@ -97,85 +97,332 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
   - TCP 2049 (NFS)
   - TCP 3306 (MYSQL)
 
+
+
+### 3. Criar o sistema de arquivos EFS
+
+<img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQS3jIJ-_cuOOAx3db4DIJBgp4ndqZhhYFLXOXM-cImBNC57fPC" width="100">
+<blockquote> 
+  As opções não especificadas aqui, deixar em default. <br/>
+  Ao iniciar a criação do EFS, selecionar Personalizar. <br/>
+  Para este projeto, é necessário editar apenas a etapa 2. <br/>
+  Escolher um nome para o sistema de arquivos é opcional.
+</blockquote>
+
+
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VPC</td>
+      <td>VPC criada anteriormente</td>
+      <td>É necessário escolher a mesma VPC do projeto</td>
+    </tr>
+    <tr>
+      <td>Destinos de montagem</td>
+      <td>Selecionar as duas sub-redes privadas</td>
+      <td>É importante selecionar a sub-rede privada 1 para a zona 1 e a sub-rede privada 2 para a zona 2</td>      
+    </tr>
+    <tr>
+      <td>Grupos de segurança</td>
+      <td>Grupo de segurança para NFS</td>
+      <td>Selecionar o mesmo grupo de segurança para as duas zonas</td>      
+    </tr>   
+  </tbody>
+</table>
+</details>
+
+
+
+### 4. Criar banco de dados RDS
+
+<img src="https://cloud-icons.onemodel.app/aws/Architecture-Service-Icons_01312023/Arch_Database/64/Arch_Amazon-RDS_64.svg" width="100">
+<blockquote> As opções não especificadas aqui, deixar em default.</blockquote>
+
+
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Opções do mecanismo</td>
+      <td>MySQL</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Modelos</td>
+      <td>Nível gratuito</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Gerenciamento de credenciais</td>
+      <td>Opcional</td>
+      <td>Escolha uma senha forte ou ative Gerar senha automaticamente. Lembre-se de guardar a senha em um local seguro</td>      
+    </tr>
+    <tr>
+      <td>Configuração da instância</td>
+      <td>db.t3.micro</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Grupo de segurança de VPC (firewall)</td>
+      <td>Selecionar o grupo de segurança para banco de dados</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Nome do banco de dados inicial</td>
+      <td>Opcional</td>
+      <td>Essa opção fica dentro de "Configuração adicional". Esse parâmetro será necessário para a conexão do WordPress </td>      
+    </tr>
+  </tbody>
+</table>
+</details>
+
+### 5. Configurar o user-data.sh
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcvwNuFBWblL4fAMRHAeRwetIcMM9yTcuRcQ&s" width="100">
+<blockquote>
+  Esse código é para ser anexado na seção Dados do usuário. <br/>
+  Esta seção está localizada no final das configurações na criação da instância EC2. <br/>  
+</blockquote>
+
+```
+#!/bin/bash
+
+# Atualiza o sistema
+sudo yum update -y
+
+# Instala o docker
+sudo yum install docker -y
+
+# Cria o diretório para o download do Docker compose
+sudo mkdir -p /usr/local/lib/docker/cli-plugins
+
+# Download do Docker Compose
+sudo curl -L https://github.com/docker/compose/releases/download/v2.30.3/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+
+# Altera a permissão do docker-compose 
+sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+# Inicia o Docker
+sudo systemctl start docker
+
+# Configura para o Docker ser iniciado junto com o sistema
+sudo systemctl enable docker
+
+# Cria o diretório efs 
+sudo mkdir -p /efs
+
+#  Monta um sistema de arquivos da Amazon Elastic File System (EFS) no Linux
+<link para anexar o sistema de arquivos EFS>
+
+# Cria e edita o arquivo docker-compose.yml
+cat <<EOF > /home/ec2-user/docker-compose.yml
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: "<endpoint do banco de dados>:3306"
+      WORDPRESS_DB_USER: "<usuário do banco de dados>"
+      WORDPRESS_DB_PASSWORD: "<senha do banco de dados>"
+      WORDPRESS_DB_NAME: "<nome do banco de dados>"
+    volumes:
+      - /efs/wordpress:/var/www/html
+
+EOF
+
+cd /home/ec2-user
+
+# Executa o arquivo docker-compose.yml
+sudo docker compose up -d
+```
+**Obs 1: Você encontrará o comando para conectar a instância EC2 com o sistema de arquivos EFS, selecionando o seu sistema de arquivos EFS (criado anteriormente) e clicando em Anexar.**  
+
+<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154447.png">
+<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154859.png">
+
+**Obs 2: Você encontrará o link DNS selecionando seu banco de dados (criado anteriormente).**
+
+<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20155138.png">
+
+### 6. Criar um modelo de execução
+<blockquote>
+  As opções não especificadas aqui, deixar em default. <br/>
+  Esta configuração serve para agilizar a criação das instâncias EC2 e também será necessário pra a configuração do Auto Scaling Group <br/>  
+</blockquote>
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Nome e descrição do modelo de execução</td>
+      <td>Opcional</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Imagens de aplicação e de sistema operacional</td>
+      <td>Amazon Linux</td>
+      <td>Essa documentação está sendo baseada nesta versão do Linux</td>      
+    </tr>
+    <tr>
+      <td>Tipo de instância</td>
+      <td>t2.micro</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Configuração da instância</td>
+      <td>db.t3.micro</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Par de chaves</td>
+      <td>Caso não tenha, é necessário criar um.</td>
+      <td>Essa chave é necessária para o acesso à instância via SSH. Lembre-se de guardar em um local seguro.</td>      
+    </tr>
+    <tr>
+      <td>Sub-rede</td>
+      <td>Não incluir no modelo de execução</td>
+      <td>Selecionar a sub-rede adequada apenas na criação da instância EC2</td>      
+    </tr>
+    <tr>
+      <td>Tags de recurso</td>
+      <td>Name</td>
+      <td>PB - Nov 2024</td>      
+    </tr>
+    <tr>
+      <td>Tags de recurso</td>
+      <td>CostCenter</td>
+      <td>C092000024</td>      
+    </tr>
+    <tr>
+      <td>Tags de recurso</td>
+      <td>Project</td>
+      <td>PB - Nov 2024</td>      
+    </tr>
+    <tr>
+      <td>Dados do usuário</td>
+      <td>Colar o user-data.sh criado anteriormente</td>
+      <td>Essa opção fica no fim da seção Detalhes adicionais</td>      
+    </tr>
+  </tbody>
+</table>
+</details>
+
+### 7. Criar as instâncias EC2
+<img src="https://www.trianz.com/sites/default/files/inline-images/Amazon-EC2.png" width="100">
+
+<blockquote>
+  As opções não especificadas aqui, deixar em default. <br/>
+  Selecionar a opção executar instância a partir de modelo e selecionar o modelo criado anteriormente. <br/>  
+</blockquote>
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Sub-rede</td>
+      <td>Selecionar a sub-rede privada</td>
+      <td>Para este projeto, é necessário ter uma instância em cada sub-rede privada. Selecionar a sub-rede privada 1 para uma instância e a sub-rede privada 2 para a segunda instância.</td>
+    </tr>   
+  </tbody>
+</table>
+</details>
+
+### 8. Criar o Classic Load Balancer
+
+<blockquote>
+  As opções não especificadas aqui, deixar em default. <br/>
+</blockquote>
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Nome do load balancer</td>
+      <td>Opcional</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>VPC</td>
+      <td>Selecionar a VPC deste projeto</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Zonas de disponibilidade</td>
+      <td>Selecionar as duas zonas de disponibilidade e uma sub-rede pública para cada zona.</td>
+      <td>Selecione a sub-rede pública 1 para a zona 1 e a sub-rede pública 2 para a zona 2</td>      
+    </tr>
+    <tr>
+      <td>Grupos de segurança </td>
+      <td>Selecionar o grupo  de segurança apropriado para o Load Balancer</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Verificações de integridade </td>
+      <td>Em Caminho de ping, colocar: /wp-admin/install.php</td>
+      <td>É preciso um caminho que retorne o código 200 para o Load Balancer</td>      
+    </tr>
+    
+  </tbody>
+</table>
+</details>
+
 ---
-
-### 3. Criar e Configurar um EFS
-1. **Escolha a opção de EFS personalizado.**
-2. **Etapa 1:**
-   - Opcionalmente, nomeie o EFS.
-   - Mantenha todas as outras opções nos valores padrão.
-3. **Etapa 2:**
-   - Selecione as sub-redes privadas 
-   - Atribua o grupo de segurança criado anteriormente a cada zona de disponibilidade.
-5. **Etapa 3:**
-   - Não modifique a política do sistema de arquivos.
-6. **Finalize a configuração.**
-
----
-
-### 4. Criar e Configurar o Banco de Dados
-- **Detalhes de Configuração:**
-  1. **Método de Criação:**
-     - Escolha o método padrão.
-  2. **Opções do Mecanismo:**
-     - MySQL.
-  3. **Modelos:**
-     - Nível gratuito.
-  4. **Configuração da Instância:**
-     - Classe da instância: `db.t3.micro`.
-  5. **Conectividade:**
-     - Atribua o grupo de segurança criado anteriormente.
-     - Não se conectar a um recurso de computação do EC2
-     - Acesso Público: não
-  6. **Configuração adicional:**
-     - Nome do banco de dados
-  7. **Guardar a senha do DB**
----
-
-### 5. Iniciar duas Instâncias EC2
-- **Detalhes da Configuração das Instâncias:**
-
-  1. **Tags:**
-     - `Name: PB - Nov 2024`
-     - `CostCenter: C092000024`
-     - `Project: PB - Nov 2024`
-
-  2. **AMI (Amazon Machine Image):**
-     - Selecione o Amazon Linux.
-
-  3. **Tipo de Instância:**
-     - `t2.micro`.
-
-  4. **Par de Chaves:**
-     - Caso não tenha, crie um novo par de chaves `.pem` e salve o arquivo com segurança. Armazene-o em um local seguro com acesso restrito e use-o para conexões SSH, especificando o arquivo de chave ao se conectar (por exemplo, usando o comando `-i` com `ssh`).
-
-  5. **Configurações de Rede:**
-     - Escolha a PVC
-     - Atribua o grupo de segurança criado anteriormente.
-     - Escolha subnets privadas diferentes para cada instância
-
-  7. **Script de Dados do Usuário:**
-     - Adicione o script de inicializaçõa na seção **Dados do Usuário** em **Detalhes avançados**:
-
----
-
-### 6. Caso precise acessar a Instância, crie um IP elástico e associe à Instância
-- Para a instância ter um ip público. Você pode desassociar o IP elástico a qualquer momento.
-
-### 7. Crie um Target Group
-- Tipo de destino: Instâncias
-- Especifique um nome
-- Escolha a PVC
-- Deixe as outras opções em default e avance para a etapa 2: Registrar Destinos
-- Selecione as duas Instâncias e clique em Incluir como pendente abaixo
-
-### 8. Crie o Load Balancer
-- Selecione Application Load Balancer
-- Escolha a PVC
-- Selecione as duas zonas de disponibilidade públicas
-- Selecione o grupo de segurança
-- Em Listeners e roteamento, deixe na porta 80 e selecione o Target Group criado anteriormente
-- As outras opções, deixe em default
 
 ### 8. Crie o Auto Scaling
 1. **Etapa 1 -** Tenha um modelo de criação de instâncias e selecione-o
