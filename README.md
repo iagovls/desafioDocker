@@ -1,7 +1,37 @@
-# Configuração do WordPress na AWS VPC com Docker
+<h1 align="center"> Desafio Compass PB </h1>
+<div
+  align="center"
+  >
+  
+[![My Skills](https://skillicons.dev/icons?i=wordpress,docker,aws)](https://skillicons.dev)
+</div>
+<h1 align="center">
+Configuração do WordPress com Docker na AWS :hammer:
+</h1>
+
+
+
 
 ## Objetivo do Projeto
-Este projeto é uma atividade prática solicitada pela equipe de estágio da Compass.UOL. O objetivo é configurar um site WordPress dentro de uma Virtual Private Cloud (VPC) na AWS, utilizando duas instâncias EC2 com Docker e um banco de dados externo.
+Este projeto é uma atividade prática solicitada pela equipe de estágios da Compass.UOL. O objetivo é configurar um site WordPress através do Docker dentro de uma Virtual Private Cloud (VPC) na AWS, utilizando duas instâncias EC2 um banco de dados externo também da AWS.
+<div align="center">
+
+  
+
+<h2>Layout do projeto</h2>
+<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20091105.png">
+</div>
+
+<div align="center">
+  <h2>Introdução</h2>
+  <div align="justify"> 
+    <p>A arquitetura do projeto precisa conter uma <strong>VPC (Virtual Private Cloud)</strong> com uma <strong>subnet pública e uma subnet privada em uma AZ (Zona de Disponibilidade)</strong> e mais uma subnet pública e uma subnet privada em outra AZ. Cada subnet privada precisa hospedar uma <strong>instância EC2 executando uma imagem Docker do WordPress</strong> conectada a um <strong>sistema de arquivos EFS compartilhado e um banco de dados RDS para armazenamento persistente.</strong> As subnets privadas precisam estar conectadas a um <strong>NAT Gateway</strong> localizado em uma subnet pública para ter acesso à internet e com isso possibilitar acesso à internet para atualizações e dependências. As subnets públicas precisam estar conectadas a um <strong>Internet Gateaway</strong> para comunicação externa. É preciso haver também um <strong>Classic Load Balancer</strong> para gerenciar o tráfego e distribuir as requisições entre as instâncias EC2. O Classic Load Balancer precisa estar integrado a um <strong>Auto Scaling Group</strong> para adicionar e remover instâncias automaticamente conforme a demanda para garantir disponibilidade e escalabilidade do ambiente.</p>
+  </div>
+  <img src="https://github.com/iagovls/desafioDocker/blob/main/inbound.png" width="700">
+  # 1 - 
+</div>
+
+
 
 ---
 
