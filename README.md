@@ -28,20 +28,67 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
     <p>A arquitetura do projeto precisa conter uma <strong>VPC (Virtual Private Cloud)</strong> com uma <strong>subnet pública e uma subnet privada em uma AZ (Zona de Disponibilidade)</strong> e mais uma subnet pública e uma subnet privada em outra AZ. Cada subnet privada precisa hospedar uma <strong>instância EC2 executando uma imagem Docker do WordPress</strong> conectada a um <strong>sistema de arquivos EFS compartilhado e um banco de dados RDS para armazenamento persistente.</strong> As subnets privadas precisam estar conectadas a um <strong>NAT Gateway</strong> localizado em uma subnet pública para ter acesso à internet e com isso possibilitar acesso à internet para atualizações e dependências. As subnets públicas precisam estar conectadas a um <strong>Internet Gateaway</strong> para comunicação externa. É preciso haver também um <strong>Classic Load Balancer</strong> para gerenciar o tráfego e distribuir as requisições entre as instâncias EC2. O Classic Load Balancer precisa estar integrado a um <strong>Auto Scaling Group</strong> para adicionar e remover instâncias automaticamente conforme a demanda para garantir disponibilidade e escalabilidade do ambiente.</p>
   </div>
   <img src="https://github.com/iagovls/desafioDocker/blob/main/inbound.png" width="700">
-  # 1 - 
+  <p>1 - O tráfego da Internet flui pelo DNS do Application Load Balancer.</p>
+  <p>2 - O Load Balancer usa sua lógica interna para determinar a instância que vai receber o tráfego.</p>
+  <p>3 e 4 - Rotas locais entre a instância, subnet privada, NAT Gateway e subnet pública.</p>
 </div>
-
-
 
 ---
 
 ## Etapas para Implantar o Projeto
 
-### 1. Criar um VPC e as sub-redes
-1. Selecionar Criar VPC e muito mais
-2. Habilitar Criar 1 NAT Gateway
+### 1. Criar VPC
 
-### 2. Criar um Grupo de Segurança na AWS
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb5Y99MlSJ0cO3qSpWYKJ5g69-DvYlwxheuw&s" width="100">
+<blockquote> As opções não especificadas aqui, deixar em default.</blockquote>
+
+
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Recursos a serem criados</td>
+      <td>VPC e muito mais</td>
+      <td>Use essa opção apenas para agilizar o processo</td>
+    </tr>
+    <tr>
+      <td>Geração automática da etiqueta de nome</td>
+      <td>Ativar Gerar automaticamente</td>
+      <td>Isso padroniza os nomes dos recursos</td>      
+    </tr>
+    <tr>
+      <td>Número de zonas de disponibilidade (AZs)</td>
+      <td>2</td>
+      <td>Para este projeto só precisaremos de duas zonas</td>      
+    </tr>
+    <tr>
+      <td>Número de sub-redes privadas</td>
+      <td>2</td>
+      <td>Cada sub-rede receberá uma instância</td>      
+    </tr>
+    <tr>
+      <td>Gateways NAT (USD)</td>
+      <td>Em 1 AZ</td>
+      <td>Necessário para as instâncias terem acesso à internet mesmo em sub-redes privadas</td>      
+    </tr>
+  </tbody>
+</table>
+</details>
+
+
+
+### 2. Criar os Grupos de Segurança na AWS
 - Habilitar as seguintes regras de entrada:
 - **Portas Necessárias:**
   - TCP 80 (HTTP)
