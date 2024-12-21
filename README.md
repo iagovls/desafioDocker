@@ -89,6 +89,10 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20113859.png">
 
 ### 2. Criar os Grupos de Segurança na AWS
+
+<img src="https://songsofsyx.com/wiki/images/9/9e/Lock_icon.png?20210530185635" width="100">
+
+
 - Habilitar as seguintes regras de entrada:
 - **Portas Necessárias:**
   - TCP 80 (HTTP)
@@ -374,6 +378,9 @@ sudo docker compose up -d
 </details>
 
 ### 8. Criar o Classic Load Balancer
+
+<img src="https://www.kirznerdobrasil.com.br/blog/wp-content/uploads/2019/12/load-balance.png" width="100">
+
 
 <blockquote>
   As opções não especificadas aqui, deixar em default. <br/>
