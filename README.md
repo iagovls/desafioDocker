@@ -28,7 +28,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 
 <div align="center">
   <h2>Layout do projeto</h2>
-  <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20091105.png">
+  <img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/layout1.png">
 </div>
 
 <div align="center">
@@ -36,7 +36,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
   <div align="justify"> 
     <p>A arquitetura do projeto precisa conter uma <strong>VPC (Virtual Private Cloud)</strong> com uma <strong>subnet pública e uma subnet privada em uma AZ (Zona de Disponibilidade)</strong> e mais uma subnet pública e uma subnet privada em outra AZ. Cada subnet privada precisa hospedar uma <strong>instância EC2 executando uma imagem Docker do WordPress</strong> conectada a um <strong>sistema de arquivos EFS compartilhado e um banco de dados RDS para armazenamento persistente.</strong> As subnets privadas precisam estar conectadas a um <strong>NAT Gateway</strong> localizado em uma subnet pública para ter acesso à internet e com isso possibilitar acesso à internet para atualizações e dependências. As subnets públicas precisam estar conectadas a um <strong>Internet Gateaway</strong> para comunicação externa. É preciso haver também um <strong>Classic Load Balancer</strong> para gerenciar o tráfego e distribuir as requisições entre as instâncias EC2. O Classic Load Balancer precisa estar integrado a um <strong>Auto Scaling Group</strong> para adicionar e remover instâncias automaticamente conforme a demanda para garantir disponibilidade e escalabilidade do ambiente.</p>
   </div>
-  <img src="https://github.com/iagovls/desafioDocker/blob/main/inbound.png" width="700">
+  <img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/inbound.png" width="700">
   <p>1 - O tráfego da Internet flui pelo DNS do Application Load Balancer.</p>
   <p>2 - O Load Balancer usa sua lógica interna para determinar a instância que vai receber o tráfego.</p>
   <p>3 e 4 - Rotas locais entre a instância, subnet privada, NAT Gateway e subnet pública.</p>
@@ -96,7 +96,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 </table>
 </details>
 
-<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20113859.png">
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/previsualizacaoVPC.png">
 
 ### 2. Criar os Grupos de Segurança
 
@@ -328,13 +328,13 @@ sudo docker compose up -d
 
 **Obs 1: Você encontrará o comando para conectar a instância EC2 com o sistema de arquivos EFS, selecionando o seu sistema de arquivos EFS (criado anteriormente) e clicando em Anexar.**  
 
-<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154447.png">
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/anexarButton.png">
 
-<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154859.png">
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/linkEFS.png">
 
 **Obs 2: Você encontrará o link DNS selecionando seu banco de dados (criado anteriormente).**
 
-<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20155138.png">
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/endpointDB.png">
 
 ### 6. Criar um modelo de execução
 
