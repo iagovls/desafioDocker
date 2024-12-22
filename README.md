@@ -1,25 +1,34 @@
 <h1 align="center"> Desafio Compass PB </h1>
-<div
-  align="center"
-  >
+<div align="center">  
   
-[![My Skills](https://skillicons.dev/icons?i=wordpress,docker,aws)](https://skillicons.dev)
+  [![My Skills](https://skillicons.dev/icons?i=wordpress,docker,aws)](https://skillicons.dev)
+  
 </div>
 <h1 align="center">
-Configuração do WordPress com Docker na AWS :hammer:
+  Configuração do WordPress com Docker na AWS :hammer:
 </h1>
-
-
-
 
 ## Objetivo do Projeto
 Este projeto é uma atividade prática solicitada pela equipe de estágios da Compass.UOL. O objetivo é configurar um site WordPress através do Docker dentro de uma Virtual Private Cloud (VPC) na AWS, utilizando duas instâncias EC2 um banco de dados externo também da AWS.
+
+## Índice
+* [Layout do projeto](Layout-do-projeto)
+* [Introdução](Introdução)
+* [Etapas para Implantar o Projeto](Etapas-para-Implantar-o-Projeto)
+1. [Criar VPC](Criar-VPC)
+2. [Criar os Grupos de Segurança](Criar-os-Grupos-de-Segurança)
+3. [Criar o sistema de arquivos EFS](Criar-o-sistema-de-arquivos-EFS)
+4. [Criar banco de dados RDS](Criar-banco-de-dados-RDS)
+5. [Configurar o user-data.sh](Configurar-o-user-data.sh)
+6. [Criar um modelo de execução](Criar-um-modelo-de-execução)
+7. [Criar as instâncias EC2](Criar-as-instâncias-EC2)
+8. [Criar o Classic Load Balancer](Criar-o-Classic-Load-Balancer)
+9. [Criar o Auto Scaling](Criar-o-Auto-Scaling)
+* [Tags do Projeto](Tags-do-Projeto)
+
 <div align="center">
-
-  
-
-<h2>Layout do projeto</h2>
-<img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20091105.png">
+  <h2>Layout do projeto</h2>
+  <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20091105.png">
 </div>
 
 <div align="center">
@@ -40,9 +49,10 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 ### 1. Criar VPC
 
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb5Y99MlSJ0cO3qSpWYKJ5g69-DvYlwxheuw&s" width="100">
+
+#### O VPC (Virtual Private Cloud) permite criar uma rede virtual privada. Você pode definir sub-redes, configurar tabelas de roteamento, gateways de internet e outras funcionalidades de rede.
+
 <blockquote> As opções não especificadas aqui, deixar em default.</blockquote>
-
-
 
 <details open>
 <summary> 
@@ -88,24 +98,67 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 
 <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20113859.png">
 
-### 2. Criar os Grupos de Segurança na AWS
+### 2. Criar os Grupos de Segurança
 
 <img src="https://songsofsyx.com/wiki/images/9/9e/Lock_icon.png?20210530185635" width="100">
 
+#### Os grupos de segurança são firewalls virtuais que controlam o tráfego de entrada e saída de recursos. Eles permitem definir regras baseadas em IP, protocolos e portas.
 
-- Habilitar as seguintes regras de entrada:
-- **Portas Necessárias:**
-  - TCP 80 (HTTP)
-  - TCP 443 (HTTPS)
-  - TCP 22 (SSH)
-  - TCP 2049 (NFS)
-  - TCP 3306 (MYSQL)
+<blockquote> 
+  As opções não especificadas aqui, deixar em default. <br/>
+  - Portas Necessárias para este projeto: <br/>
+  - TCP 80 (HTTP)  <br/>
+  - TCP 22 (SSH) <br/>
+  - TCP 2049 (NFS) <br/>
+  - TCP 3306 (MYSQL) <br/>
+  Serão necessários grupos de segurança para as Instâncias, RDS, EFS e Load Balancer. <br/>
+  Para este projeto será apenas necessário ajustar as regras de entrada. <br/>
+  Para cada grupo de segurança, selecionar o VPC deste projeto.
+</blockquote>
 
+<details open>
+<summary> 
+  Passo a passo
 
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Grupo de segurança</th>
+    <th>Portas</th>
+    <th>Códigos</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Instâncias</td>
+      <td>HTTP, SSH, NFS, MYSQL</td>
+      <td>80, 22, 2049, 3306</td>
+    </tr>
+    <tr>
+      <td>Sistema de arquivos EFS</td>
+      <td>NFS e SSH</td>
+      <td>2049 e 22</td>      
+    </tr>
+    <tr>
+      <td>Banco de Dados RDS</td>
+      <td>MYSQL</td>
+      <td>3306</td>      
+    </tr>   
+    <tr>
+      <td>Load Balancer</td>
+      <td>HTTP</td>
+      <td>80</td>      
+    </tr>   
+  </tbody>
+</table>
+</details>
 
 ### 3. Criar o sistema de arquivos EFS
 
 <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQS3jIJ-_cuOOAx3db4DIJBgp4ndqZhhYFLXOXM-cImBNC57fPC" width="100">
+
+#### O Amazon EFS (Elastic File System) é um serviço de sistema de arquivos escalável e elástico fornecido pela Amazon Web Services (AWS). Ele permite que múltiplas instâncias do Amazon EC2 (ou outros serviços) acessem simultaneamente um sistema de arquivos compartilhado, com alta disponibilidade e baixa latência.
+
 <blockquote> 
   As opções não especificadas aqui, deixar em default. <br/>
   Ao iniciar a criação do EFS, selecionar Personalizar. <br/>
@@ -152,6 +205,9 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 ### 4. Criar banco de dados RDS
 
 <img src="https://cloud-icons.onemodel.app/aws/Architecture-Service-Icons_01312023/Arch_Database/64/Arch_Amazon-RDS_64.svg" width="100">
+
+O Amazon RDS é um serviço gerenciado de banco de dados na nuvem. Ele oferece backups automatizados, alta disponibilidade e escalabilidade.
+
 <blockquote> As opções não especificadas aqui, deixar em default.</blockquote>
 
 
@@ -204,7 +260,11 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 </details>
 
 ### 5. Configurar o user-data.sh
+
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcvwNuFBWblL4fAMRHAeRwetIcMM9yTcuRcQ&s" width="100">
+
+#### O User-Data.sh é um script que pode ser executado automaticamente na inicialização de uma instância EC2 e assim automatizar configurações, atualizações, executar comandos entre outras funcionalidades. 
+
 <blockquote>
   Esse código é para ser anexado na seção Dados do usuário. <br/>
   Esta seção está localizada no final das configurações na criação da instância EC2. <br/>  
@@ -265,9 +325,11 @@ cd /home/ec2-user
 # Executa o arquivo docker-compose.yml
 sudo docker compose up -d
 ```
+
 **Obs 1: Você encontrará o comando para conectar a instância EC2 com o sistema de arquivos EFS, selecionando o seu sistema de arquivos EFS (criado anteriormente) e clicando em Anexar.**  
 
 <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154447.png">
+
 <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20154859.png">
 
 **Obs 2: Você encontrará o link DNS selecionando seu banco de dados (criado anteriormente).**
@@ -275,6 +337,9 @@ sudo docker compose up -d
 <img src="https://github.com/iagovls/desafioDocker/blob/main/Screenshot%202024-12-21%20155138.png">
 
 ### 6. Criar um modelo de execução
+
+<img src="https://www.trianz.com/sites/default/files/inline-images/Amazon-EC2.png" width="100">
+
 <blockquote>
   As opções não especificadas aqui, deixar em default. <br/>
   Esta configuração serve para agilizar a criação das instâncias EC2 e também será necessário pra a configuração do Auto Scaling Group <br/>  
@@ -283,7 +348,6 @@ sudo docker compose up -d
 <details open>
 <summary> 
   Passo a passo
-
 </summary>
 <br>
 <table>
@@ -324,6 +388,16 @@ sudo docker compose up -d
       <td>Selecionar a sub-rede adequada apenas na criação da instância EC2</td>      
     </tr>
     <tr>
+      <td>Firewall (grupos de segurança)</td>
+      <td>Selecionar grupo de segurança existente</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Grupos de segurança</td>
+      <td>Selecionar o grupo de segurança para Instâncias</td>
+      <td></td>      
+    </tr>
+    <tr>
       <td>Tags de recurso</td>
       <td>Name</td>
       <td>PB - Nov 2024</td>      
@@ -348,11 +422,15 @@ sudo docker compose up -d
 </details>
 
 ### 7. Criar as instâncias EC2
+
 <img src="https://www.trianz.com/sites/default/files/inline-images/Amazon-EC2.png" width="100">
+
+#### O Amazon EC2 fornece capacidade de computação na nuvem. Ele permite criar e usar máquinas virtuais com diferentes sistemas operacionais.
 
 <blockquote>
   As opções não especificadas aqui, deixar em default. <br/>
   Selecionar a opção executar instância a partir de modelo e selecionar o modelo criado anteriormente. <br/>  
+  Todas as configurações serão ajustadas automaticamente conforme o modelo, será necessário ajustar somente as sub-redes.
 </blockquote>
 
 <details open>
@@ -381,6 +459,7 @@ sudo docker compose up -d
 
 <img src="https://www.kirznerdobrasil.com.br/blog/wp-content/uploads/2019/12/load-balance.png" width="100">
 
+#### O Classic Load Balancer é um serviço que distribui automaticamente o tráfego de entrada entre várias instâncias EC2 em uma ou mais zonas de disponibilidade.
 
 <blockquote>
   As opções não especificadas aqui, deixar em default. <br/>
@@ -429,18 +508,74 @@ sudo docker compose up -d
 </table>
 </details>
 
----
+### 9. Criar o Auto Scaling
 
-### 8. Crie o Auto Scaling
-1. **Etapa 1 -** Tenha um modelo de criação de instâncias e selecione-o
-2. **Etapa 2 -** Selecione a VPC e as sub-redes públicas
-3. **Etapa 3 -** Selecione Anexar a um balanceador de carga existente e selecione o grupo de destino
-4. **Etapa 4 -**
-- Capacidade desejada: deixar em zero
-- Capacidade mínima: deixar em zero
-- Capacidade máxima: opcional
+#### O Auto Scaling ajusta automaticamente a quantidade de instâncias EC2 com base na demanda de tráfego ou desempenho.
 
-- Nas outras etapas, deixar em defalut e todas as configurações não mencionadas, deixar em default
+<blockquote>
+  As opções não especificadas aqui, deixar em default. <br/>
+</blockquote>
+
+<details open>
+<summary> 
+  Passo a passo
+</summary>
+<br>
+<table>
+  <thead>
+    <th>Opção</th>
+    <th>Selecionar</th>
+    <th>Explicação</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Nome do grupo do Auto Scaling</td>
+      <td>Opcional</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Modelo de execução</td>
+      <td>Selecionar o modelo de execução criado anteriormente</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>VPC</td>
+      <td>Selecionar o VPC deste projeto</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Zonas de disponibilidade e sub-redes</td>
+      <td>Selecionar as duas sub-redes públicas</td>
+      <td>O Auto Scaling vai distribuir as novas instâncias entre as duas sub-redes</td>      
+    </tr>
+    <tr>
+      <td>Balanceamento de carga</td>
+      <td>Anexar a um balanceador de carga existente</td>
+      <td></td>      
+    </tr>
+    <tr>
+      <td>Anexar a um balanceador de carga existente</td>
+      <td>Escolher entre Classic Load Balancers</td>
+      <td>Selecione o Classic Load Balancer criado anteriormente</td>      
+    </tr>
+      <tr>
+      <tdCapacidade desejada </td>
+      <td>0</td>
+      <td>Inicialmente haverá apenas as duas instâncias criadas anteriormente</td>      
+    </tr>
+      <tr>
+      <td>Capacidade mínima desejada</td>
+      <td>0</td>
+      <td>Inicialmente haverá apenas as duas instâncias criadas anteriormente</td>      
+    </tr>
+      <tr>
+      <td>Capacidade máxima desejada</td>
+      <td>Opcional</td>
+      <td>Ajustar conforme a necessidade futura</td>      
+    </tr>
+  </tbody>
+</table>
+</details>
 
 ---
 
