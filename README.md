@@ -5,7 +5,7 @@
   
 </div>
 <h1 align="center">
-  Configuração do WordPress com Docker na AWS :hammer:
+  Configuração do WordPress com Docker em um VPC na AWS
 </h1>
 
 ## Objetivo do Projeto
