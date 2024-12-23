@@ -508,6 +508,14 @@ sudo docker compose up -d
 </table>
 </details>
 
+#### Após a criação do Load Balancer, o link DNS estará disponivel. 
+
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/linkDNS-LB.png">
+
+#### Acesse-o pelo navegador e você deve esperar a página inicial de configuração do WordPress como na imagem abaixo.
+
+<img src="https://github.com/iagovls/desafioDocker/blob/main/imagens/pagina-inicial-WP.png">
+
 ### 9. Criar o Auto Scaling
 
 #### O Auto Scaling ajusta automaticamente a quantidade de instâncias EC2 com base na demanda de tráfego ou desempenho.
@@ -576,7 +584,7 @@ sudo docker compose up -d
   </tbody>
 </table>
 </details>
-
+        
 ---
 
 ## Tags do Projeto
