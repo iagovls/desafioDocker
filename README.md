@@ -594,4 +594,8 @@ sudo docker compose up -d
 - VPC
 - Banco de Dados MySQL
 
+## 🤝Agradecimentos
+
+Obrigado Ana Soares Nunes pela parceria.
+Obrigado pelo auxílio, Davi Santos Cardoso da Silva e Paulo Henrique Nunes Silva.
 
