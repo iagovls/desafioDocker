@@ -19,12 +19,17 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 2. [Criar os Grupos de Segurança](https://github.com/iagovls/desafioDocker/blob/main/README.md#2-criar-os-grupos-de-seguran%C3%A7a)
 3. [Criar o sistema de arquivos EFS](https://github.com/iagovls/desafioDocker/blob/main/README.md#3-criar-o-sistema-de-arquivos-efs)
 4. [Criar banco de dados RDS](https://github.com/iagovls/desafioDocker/blob/main/README.md#4-criar-banco-de-dados-rds)
-5. [Configurar o user-data.sh](Configurar-o-user-data.sh)
-6. [Criar um modelo de execução](Criar-um-modelo-de-execução)
-7. [Criar as instâncias EC2](Criar-as-instâncias-EC2)
-8. [Criar o Classic Load Balancer](Criar-o-Classic-Load-Balancer)
-9. [Criar o Auto Scaling](Criar-o-Auto-Scaling)
-* [Tags do Projeto](Tags-do-Projeto)
+5. [Criar um modelo de execução](https://github.com/iagovls/desafioDocker/edit/main/README.md#5-criar-um-modelo-de-execu%C3%A7%C3%A3o)
+6. [Criar as instâncias EC2](https://github.com/iagovls/desafioDocker/edit/main/README.md#6-criar-as-inst%C3%A2ncias-ec2)
+7. [Acessar a uma instância via SSH](https://github.com/iagovls/desafioDocker/edit/main/README.md#7-acessar-a-uma-inst%C3%A2ncia-via-ssh)
+8. [Criar o Classic Load Balancer](https://github.com/iagovls/desafioDocker/edit/main/README.md#8-criar-o-classic-load-balancer
+)
+9. [Criar o Auto Scaling](https://github.com/iagovls/desafioDocker/edit/main/README.md#9-criar-o-auto-scaling
+
+)
+* [Tags do Projeto](https://github.com/iagovls/desafioDocker/edit/main/README.md#tags-do-projeto)
+* [Agradecimentos](https://github.com/iagovls/desafioDocker/edit/main/README.md#agradecimentos
+)
 
 <div align="center">
   <h2>✒️ Layout do projeto</h2>
@@ -491,6 +496,50 @@ sudo docker compose up -d
     </tr>   
   </tbody>
 </table>
+</details>
+
+<br/>
+
+---
+
+<br/>
+
+### 7. Acessar a uma instância via SSH
+
+<img src="https://www.trianz.com/sites/default/files/inline-images/Amazon-EC2.png" width="100">
+
+#### Você pode precisar acessar às instâncias eventualmente. Considenrando que as instâncias das sub-redes privadas estão configuradas corretamente ao EFS, qualquer alteração em no diretório EFS das instâncias das sub-redes públicas terá efeito nas instâncias nas sub-redes privadas. 
+
+`Passo a passo para acessar a instância na sub-rede pública via SSH.`
+
+`Não é recomendado haver uma instância em uma sub-rede púbica com ip público. Estas instâncias precisam ser temporárias. Logo, encerre estas instâncias quando não precisar delas.`
+
+<details open>
+<summary> 
+  Passo a passo
+
+</summary>
+
+1. Crie uma nova instância com as mesmas configurações do [tópico 5](https://github.com/iagovls/desafioDocker?tab=readme-ov-file#5-criar-um-modelo-de-execu%C3%A7%C3%A3o)
+
+2.  Em **Configurações de rede** clique em **Editar**.
+
+3. Em **Sub-rede** selecione uma sub-rede pública.
+
+4. Em **Atribuir IP público automaticamente** selecione **Habilitar**.
+
+5. Execute a instância.
+
+6. Acesse um terminal.
+
+7. Acesse o diretório onde está localizado a chave de acesso da instância.
+
+8. Execute o seguinte comando abaixo substituindo o ``nome da chave de acesso`` e o ``IP público`` da instância.
+
+```sh
+ssh -i <chaveDeAcesso>.pem ec2-user@<ipPublicoDaInstância>
+```
+
 </details>
 
 <br/>
