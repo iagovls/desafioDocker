@@ -25,9 +25,8 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 8. [Criar o Classic Load Balancer](https://github.com/iagovls/desafioDocker/edit/main/README.md#8-criar-o-classic-load-balancer
 )
 9. [Criar o Auto Scaling](https://github.com/iagovls/desafioDocker/edit/main/README.md#9-criar-o-auto-scaling)
-* [Tags do Projeto](https://github.com/iagovls/desafioDocker/edit/main/README.md#tags-do-projeto)
-* [Agradecimentos](https://github.com/iagovls/desafioDocker/edit/main/README.md#agradecimentos
-)
+* [Tags do Projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#tags-do-projeto)
+* [Agradecimentos](https://github.com/iagovls/desafioDocker/blob/main/README.md#agradecimentos)
 
 <div align="center">
   <h2>✒️ Layout do projeto</h2>
