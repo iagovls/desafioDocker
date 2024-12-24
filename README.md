@@ -24,9 +24,7 @@ Este projeto é uma atividade prática solicitada pela equipe de estágios da Co
 7. [Acessar a uma instância via SSH](https://github.com/iagovls/desafioDocker/edit/main/README.md#7-acessar-a-uma-inst%C3%A2ncia-via-ssh)
 8. [Criar o Classic Load Balancer](https://github.com/iagovls/desafioDocker/edit/main/README.md#8-criar-o-classic-load-balancer
 )
-9. [Criar o Auto Scaling](https://github.com/iagovls/desafioDocker/edit/main/README.md#9-criar-o-auto-scaling
-
-)
+9. [Criar o Auto Scaling](https://github.com/iagovls/desafioDocker/edit/main/README.md#9-criar-o-auto-scaling)
 * [Tags do Projeto](https://github.com/iagovls/desafioDocker/edit/main/README.md#tags-do-projeto)
 * [Agradecimentos](https://github.com/iagovls/desafioDocker/edit/main/README.md#agradecimentos
 )
