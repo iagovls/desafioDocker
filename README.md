@@ -12,9 +12,9 @@
 Este projeto é uma atividade prática solicitada pela equipe de estágios da Compass.UOL. O objetivo é configurar um site WordPress através do Docker dentro de uma Virtual Private Cloud (VPC) na AWS, utilizando duas instâncias EC2 um banco de dados externo também da AWS.
 
 ## Índice
-* [Layout do projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#%EF%B8%8Flayout-do-projeto)
-* [Introdução](https://github.com/iagovls/desafioDocker/blob/main/README.md#introdu%C3%A7%C3%A3o)
-* [Etapas para Implantar o Projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#etapas-para-implantar-o-projeto)
+* [Layout do projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#%EF%B8%8F-layout-do-projeto)
+* [Introdução](https://github.com/iagovls/desafioDocker/blob/main/README.md#-introdu%C3%A7%C3%A3o)
+* [Etapas para Implantar o Projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#-etapas-para-implantar-o-projeto)
 1. [Criar VPC](https://github.com/iagovls/desafioDocker/blob/main/README.md#1-criar-vpc)
 2. [Criar os Grupos de Segurança](https://github.com/iagovls/desafioDocker/blob/main/README.md#2-criar-os-grupos-de-seguran%C3%A7a)
 3. [Criar o sistema de arquivos EFS](https://github.com/iagovls/desafioDocker/blob/main/README.md#3-criar-o-sistema-de-arquivos-efs)
