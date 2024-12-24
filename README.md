@@ -12,7 +12,7 @@
 Este projeto é uma atividade prática solicitada pela equipe de estágios da Compass.UOL. O objetivo é configurar um site WordPress através do Docker dentro de uma Virtual Private Cloud (VPC) na AWS, utilizando duas instâncias EC2 um banco de dados externo também da AWS.
 
 ## Índice
-* [Layout do projeto](Layout-do-projeto)
+* [Layout do projeto](https://github.com/iagovls/desafioDocker/blob/main/README.md#%EF%B8%8Flayout-do-projeto)
 * [Introdução](Introdução)
 * [Etapas para Implantar o Projeto](Etapas-para-Implantar-o-Projeto)
 1. [Criar VPC](Criar-VPC)
